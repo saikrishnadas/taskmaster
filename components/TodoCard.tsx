@@ -1,7 +1,8 @@
 "use client"
-
+import {useEffect,useState} from "react";
 import { useBoardStore } from "@/store/useBoardStore";
 import {DraggableProvidedDragHandleProps,DraggableProvidedDraggableProps} from "react-beautiful-dnd";
+import {Image} from "next/image";
 
 type Props = {
     todo: Todo;
@@ -15,6 +16,18 @@ type Props = {
 const TodoCard = ({todo,index,id,innerRef, dragHandleProps,draggableProps}: Props) => {
 
     const deleteTask = useBoardStore((state) => state.deleteTask);
+    const [imageUrl, setImageUrl] = useState<string | null>(null);
+
+    useEffect(() => {
+        if(todo.image){
+            const fetchImage = async () => {
+                const url = await getUrl(todo.image!);
+                if(url){
+                    setImageUrl(url.toString());
+                }
+            }
+        }
+    },[todo])
 
     return (<div
     className="bg-white rounded-md space-y-2 drop-shadow-md"
@@ -30,6 +43,17 @@ const TodoCard = ({todo,index,id,innerRef, dragHandleProps,draggableProps}: Prop
             </button>
         </div>
         {/* Add Image */}
+        {imageUrl && (
+            <div className="h-full w-full rounded-b-md">
+                <Image 
+                    src={imageUrl}
+                    alt="Task Image"
+                    width={400}
+                    height={200}
+                    className="w-full object-contain rounded-b-md"
+                />
+            </div>
+        )}
     </div>)
 }
 
