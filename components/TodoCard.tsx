@@ -1,5 +1,6 @@
 "use client"
 
+import { useBoardStore } from "@/store/useBoardStore";
 import {DraggableProvidedDragHandleProps,DraggableProvidedDraggableProps} from "react-beautiful-dnd";
 
 type Props = {
@@ -12,7 +13,10 @@ type Props = {
 }
 
 const TodoCard = ({todo,index,id,innerRef, dragHandleProps,draggableProps}: Props) => {
-    return <div
+
+    const deleteTask = useBoardStore((state) => state.deleteTask);
+
+    return (<div
     className="bg-white rounded-md space-y-2 drop-shadow-md"
     {...dragHandleProps}
     {...draggableProps}
@@ -21,12 +25,12 @@ const TodoCard = ({todo,index,id,innerRef, dragHandleProps,draggableProps}: Prop
             <p>
                 {todo.title}
             </p>
-            <button className="text-red-500 hover:text-red-600">
+            <button onClick={() => deleteTask(index,todo,id)} className="text-red-500 hover:text-red-600">
                 <XCircleIcon className="ml-5 h-8 w-8" />
             </button>
         </div>
         {/* Add Image */}
-    </div>
+    </div>)
 }
 
 export default TodoCard;
