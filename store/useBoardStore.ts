@@ -56,11 +56,11 @@ export const useBoardStore = create<BoardState>((set,get) => ({
         )
     },
 
-    deleteTask: async (taskIndex:number,todoId:Todo,id:TypedColumn) => {
+    deleteTask: async (taskIndex:number,todo:Todo,id:TypedColumn) => {
         const newColumns = new Map(get().board.columns);
 
         //delete todoId from newColumns
-        newColumns.get(id)?.todo.splice(taskIndex,1);
+        newColumns.get(id)?.todos.splice(taskIndex,1);
         set({board:{columns:newColumns}})
 
         if(todo.image){
@@ -80,7 +80,7 @@ export const useBoardStore = create<BoardState>((set,get) => ({
 
     setImage: (image: File | null) => set({image}),
 
-    addTask: (todo:string, columnId: TypedColumn, image?:File | null) => {
+    addTask: async (todo:string, columnId: TypedColumn, image?:File | null) => {
         let file: Image | undefined;
 
         if(image) {
